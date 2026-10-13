@@ -2,10 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# ---------------------------------------------------------
 # 1. Khởi tạo dữ liệu giả lập cho 10 sinh viên
-# ---------------------------------------------------------
-np.random.seed(42) # Cố định dữ liệu mẫu
+np.random.seed(42)
 
 data = {
     "Họ tên": [
@@ -18,11 +16,8 @@ data = {
 }
 
 df = pd.DataFrame(data)
-
-# Tính Điểm tổng kết: 10% Chuyên cần + 30% Giữa kỳ + 60% Cuối kỳ
 df["Tổng kết"] = (df["Chuyên cần"] * 0.1 + df["Giữa kỳ"] * 0.3 + df["Cuối kỳ"] * 0.6).round(1)
 
-# Xếp loại dựa trên Điểm tổng kết
 def xep_loai(score):
     if score >= 8.5:
         return "Xuất sắc"
@@ -37,47 +32,34 @@ def xep_loai(score):
 
 df["Xếp loại"] = df["Tổng kết"].apply(xep_loai)
 
-# ---------------------------------------------------------
 # 2. Xây dựng giao diện Web App bằng Streamlit
-# ---------------------------------------------------------
-
-# Hiển thị tiêu đề
 st.title("QUẢN LÝ ĐIỂM SINH VIÊN")
 
-# Hiển thị bảng điểm của 10 sinh viên
 st.subheader("📋 Bảng điểm sinh viên")
 st.dataframe(df, use_container_width=True)
 
-# Hiển thị các chỉ số thống kê
 st.subheader("📊 Thống kê chung của lớp")
-
 col1, col2, col3, col4 = st.columns(4)
 
-# Điểm trung bình lớp
 dtb_lop = df["Tổng kết"].mean().round(2)
 col1.metric("Điểm TB lớp", dtb_lop)
 
-# Sinh viên cao điểm nhất
 sv_max = df.loc[df["Tổng kết"].idxmax()]
 col2.metric("Cao nhất", f"{sv_max['Tổng kết']} điểm", help=f"Sinh viên: {sv_max['Họ tên']}")
 
-# Sinh viên thấp điểm nhất
 sv_min = df.loc[df["Tổng kết"].idxmin()]
 col3.metric("Thấp nhất", f"{sv_min['Tổng kết']} điểm", help=f"Sinh viên: {sv_min['Họ tên']}")
 
-# Số sinh viên đạt (Tổng kết >= 4.0)
 so_sv_dat = (df["Tổng kết"] >= 4.0).sum()
 col4.metric("Số SV đạt", f"{so_sv_dat} / 10")
 
 st.markdown("---")
 
-# Danh sách xổ xuống (Selectbox) để tra cứu thông tin chi tiết
 st.subheader("🔍 Tra cứu điểm sinh viên")
 selected_student = st.selectbox("Chọn một sinh viên:", df["Họ tên"])
 
 if selected_student:
     student_info = df[df["Họ tên"] == selected_student].iloc[0]
-    
     col_a, col_b, col_c, col_d, col_e = st.columns(5)
     col_a.write(f"**Chuyên cần:** {student_info['Chuyên cần']}")
     col_b.write(f"**Giữa kỳ:** {student_info['Giữa kỳ']}")
@@ -87,16 +69,14 @@ if selected_student:
 
 st.markdown("---")
 
-# Hiển thị biểu đồ cột điểm tổng kết
 st.subheader("📈 Biểu đồ điểm tổng kết")
 chart_data = df.set_index("Họ tên")[["Tổng kết"]]
 st.bar_chart(chart_data)
 
 st.markdown("---")
-
-# Hiển thị Họ tên và MSSV ở cuối trang với kích thước chữ nhỏ
 st.markdown(
     "<p style='text-align: center; color: gray; font-size: 13px;'>"
-    "Người tạo ứng dụng: <b>TRANNGOCANH</b> - MSSV: <b>034208004115</b>"
+    "Người tạo ứng dụng: <b>Họ và Tên của bạn</b> - MSSV: <b>Mã_Số_Sinh_Viên_Của_Bạn</b>"
     "</p>", 
-    unsafe_allow_html=False   
+    unsafe_allow_html=False
+)
