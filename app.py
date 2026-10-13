@@ -81,7 +81,7 @@ if selected_student:
     col_a, col_b, col_c, col_d, col_e = st.columns(5)
     col_a.write(f"**Chuyên cần:** {student_info['Chuyên cần']}")
     col_b.write(f"**Giữa kỳ:** {student_info['Giữa kỳ']}")
- col_c.write(f"**Cuối kỳ:** {student_info['Cuối kỳ']}")
+    col_c.write(f"**Cuối kỳ:** {student_info['Cuối kỳ']}")
     col_d.write(f"**Tổng kết:** {student_info['Tổng kết']}")
     col_e.write(f"**Xếp loại:** {student_info['Xếp loại']}")
 
